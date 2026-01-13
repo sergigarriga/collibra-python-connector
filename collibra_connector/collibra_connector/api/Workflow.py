@@ -1,5 +1,13 @@
 import uuid
 from .Base import BaseAPI
+from ..models import (
+    parse_workflow_task, 
+    parse_workflow_tasks, 
+    parse_workflow_instance, 
+    parse_workflow_instances,
+    parse_workflow_definition,
+    parse_workflow_definitions
+)
 
 
 class Workflow(BaseAPI):
@@ -184,7 +192,7 @@ class Workflow(BaseAPI):
             params["userId"] = user_id
 
         response = self._get(url=f"{self.__base_api}/workflowTasks", params=params)
-        return self._handle_response(response)
+        return parse_workflow_tasks(self._handle_response(response))
 
     def get_workflow_task_id(self, instance_id: str, workflow_definition_id: str):
         """

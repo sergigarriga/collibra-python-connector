@@ -1,5 +1,6 @@
 import uuid
 from .Base import BaseAPI
+from ..models import parse_user, parse_users
 
 
 class User(BaseAPI):
@@ -24,7 +25,7 @@ class User(BaseAPI):
             raise ValueError("user_id must be a valid UUID") from exc
 
         response = self._get(url=f"{self.__base_api}/{user_id}")
-        return self._handle_response(response)
+        return parse_user(self._handle_response(response))
 
     def get_user_by_username(self, username: str):
         """
@@ -66,7 +67,7 @@ class User(BaseAPI):
         }
 
         response = self._post(url=self.__base_api, data=data)
-        return self._handle_response(response)
+        return parse_user(self._handle_response(response))
 
     def find_users(
         self,
@@ -200,4 +201,4 @@ class User(BaseAPI):
                 params["userId"].append(user_id)
 
         response = self._get(url=self.__base_api, params=params)
-        return self._handle_response(response)
+        return parse_users(self._handle_response(response))

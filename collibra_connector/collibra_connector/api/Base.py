@@ -123,9 +123,9 @@ class BaseAPI:
         :param response: The response object from the API request.
         :return: The JSON content of the response if successful, otherwise raises an error.
         """
-        if response.status_code in [200, 201]:
+        if response.status_code in [200, 201, 204]:
             # Check if response has content before trying to parse JSON
-            if response.text.strip():
+            if response.status_code != 204 and response.text.strip():
                 try:
                     return response.json()
                 except ValueError as e:
@@ -137,6 +137,8 @@ class BaseAPI:
             raise ForbiddenError("Forbidden access - insufficient permissions: " + response.text)
         elif response.status_code == 404:
             raise NotFoundError("The specified resource was not found: " + response.text)
+        elif response.status_code == 400:
+            raise CollibraAPIError("Bad Request - Invalid parameters: " + response.text, response.status_code)
         elif response.status_code >= 500:
             raise ServerError("Internal server error - something went wrong on the server: " + response.text)
         else:

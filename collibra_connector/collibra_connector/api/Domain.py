@@ -1,5 +1,6 @@
 import uuid
 from .Base import BaseAPI
+from ..models import parse_domain, parse_domains
 
 
 class Domain(BaseAPI):
@@ -24,7 +25,7 @@ class Domain(BaseAPI):
             raise ValueError("domain_id must be a valid UUID") from exc
 
         response = self._get(url=f"{self.__base_api}/{domain_id}")
-        return self._handle_response(response)
+        return parse_domain(self._handle_response(response))
 
     def find_domains(
         self,
@@ -113,7 +114,7 @@ class Domain(BaseAPI):
             params["typePublicId"] = type_public_id
 
         response = self._get(url=self.__base_api, params=params)
-        return self._handle_response(response)
+        return parse_domains(self._handle_response(response))
 
     def add_domain(
         self,
@@ -207,7 +208,7 @@ class Domain(BaseAPI):
             data["typePublicId"] = type_public_id
 
         response = self._post(url=self.__base_api, data=data)
-        return self._handle_response(response)
+        return parse_domain(self._handle_response(response))
 
     def remove_domain(self, domain_id: str):
         """
@@ -308,4 +309,4 @@ class Domain(BaseAPI):
             data["excludedFromAutoHyperlinking"] = excluded_from_auto_hyperlinking
 
         response = self._patch(url=f"{self.__base_api}/{domain_id}", data=data)
-        return self._handle_response(response)
+        return parse_domain(self._handle_response(response))

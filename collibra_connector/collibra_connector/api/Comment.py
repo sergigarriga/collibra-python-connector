@@ -1,5 +1,6 @@
 import uuid
 from .Base import BaseAPI
+from ..models import parse_comment, parse_comments
 
 
 class Comment(BaseAPI):
@@ -12,7 +13,7 @@ class Comment(BaseAPI):
         Add a comment to an asset.
         :param asset_id: The ID of the asset to comment on.
         :param content: The content of the comment.
-        :return: The created comment details.
+        :return: The created comment model.
         """
         if not asset_id or not content:
             raise ValueError("asset_id and content are required parameters")
@@ -33,7 +34,7 @@ class Comment(BaseAPI):
         }
 
         response = self._post(url=self.__base_api, data=data)
-        return self._handle_response(response)
+        return parse_comment(self._handle_response(response))
 
     def find_comments(
         self,
@@ -60,7 +61,7 @@ class Comment(BaseAPI):
         :param sort_order: Sort order on creation date. 'ASC' or 'DESC'.
         :param user_id: ID of the user to filter comments by.
         :param user_threads: Whether to search for root comments created by or mentioning the user.
-        :return: List of comments matching the criteria.
+        :return: Paginated list of comments.
         """
         # Validate base_resource_id if provided
         if base_resource_id is not None:
@@ -122,4 +123,4 @@ class Comment(BaseAPI):
             params["userThreads"] = user_threads
 
         response = self._get(url=self.__base_api, params=params)
-        return self._handle_response(response)
+        return parse_comments(self._handle_response(response))

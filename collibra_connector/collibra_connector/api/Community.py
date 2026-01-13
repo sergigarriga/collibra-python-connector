@@ -1,5 +1,6 @@
 import uuid
 from .Base import BaseAPI
+from ..models import parse_community, parse_communities
 
 
 class Community(BaseAPI):
@@ -24,7 +25,7 @@ class Community(BaseAPI):
             raise ValueError("community_id must be a valid UUID") from exc
 
         response = self._get(url=f"{self.__base_api}/{community_id}")
-        return self._handle_response(response)
+        return parse_community(self._handle_response(response))
 
     def find_communities(
         self,
@@ -109,7 +110,7 @@ class Community(BaseAPI):
             params["sortOrder"] = sort_order
 
         response = self._get(url=self.__base_api, params=params)
-        return self._handle_response(response)
+        return parse_communities(self._handle_response(response))
 
     def add_community(
         self,
@@ -174,7 +175,7 @@ class Community(BaseAPI):
             data["id"] = community_id
 
         response = self._post(url=self.__base_api, data=data)
-        return self._handle_response(response)
+        return parse_community(self._handle_response(response))
 
     def change_community(
         self,
@@ -245,7 +246,7 @@ class Community(BaseAPI):
             data["removeScopeOverlapOnMove"] = remove_scope_overlap_on_move
 
         response = self._patch(url=f"{self.__base_api}/{community_id}", data=data)
-        return self._handle_response(response)
+        return parse_community(self._handle_response(response))
 
     def remove_community(self, community_id: str):
         """
@@ -289,4 +290,4 @@ class Community(BaseAPI):
             raise ValueError("community_id must be a valid UUID") from exc
 
         response = self._post(url=f"{self.__base_api}/{community_id}/root", data={})
-        return self._handle_response(response)
+        return parse_community(self._handle_response(response))

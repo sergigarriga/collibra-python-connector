@@ -1,19 +1,29 @@
 from .Asset import Asset
-from .Base import BaseAPI
+from .Attribute import Attribute
 from .Community import Community
-from .Comment import Comment
 from .Domain import Domain
-from .Exceptions import (
-    CollibraAPIError,
-    UnauthorizedError,
-    ForbiddenError,
-    NotFoundError,
-    ServerError
-)
-from .Metadata import Metadata
-from .OutputModule import OutputModule
-from .Relation import Relation
-from .Responsibility import Responsibility
 from .User import User
-from .Utils import Utils
+from .Responsibility import Responsibility
 from .Workflow import Workflow
+from .Metadata import Metadata
+from .Comment import Comment
+from .Relation import Relation
+from .OutputModule import OutputModule
+from .Utils import Utils
+from .Search import Search
+
+__all__ = [
+    "Asset",
+    "Attribute",
+    "Community",
+    "Domain",
+    "User",
+    "Responsibility",
+    "Workflow",
+    "Metadata",
+    "Comment",
+    "Relation",
+    "OutputModule",
+    "Utils",
+    "Search"
+]
